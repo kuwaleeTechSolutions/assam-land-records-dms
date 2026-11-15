@@ -1,0 +1,4 @@
+<?php
+namespace Tests\Feature\Auth;
+use App\Domain\Identity\Enums\UserStatus;use App\Livewire\Auth\Login;use App\Models\User;use Illuminate\Foundation\Testing\RefreshDatabase;use Livewire\Livewire;use Tests\TestCase;
+class LoginTest extends TestCase{use RefreshDatabase;public function test_active_user_can_login():void{$u=User::factory()->create(['username'=>'officer1','status'=>UserStatus::Active,'password'=>'StrongPassword!123']);Livewire::test(Login::class)->set('username','officer1')->set('password','StrongPassword!123')->call('authenticate')->assertRedirect(route('dashboard'));$this->assertAuthenticatedAs($u);}public function test_disabled_user_cannot_login():void{User::factory()->create(['username'=>'officer2','status'=>UserStatus::Disabled,'password'=>'StrongPassword!123']);Livewire::test(Login::class)->set('username','officer2')->set('password','StrongPassword!123')->call('authenticate')->assertHasErrors('username');$this->assertGuest();}}

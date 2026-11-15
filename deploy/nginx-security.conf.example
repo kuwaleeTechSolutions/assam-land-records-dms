@@ -1,0 +1,9 @@
+# Merge carefully into the HTTPS server block after testing.
+server_tokens off;
+client_max_body_size 256m;
+add_header X-Content-Type-Options "nosniff" always;
+add_header Referrer-Policy "strict-origin-when-cross-origin" always;
+# HSTS only after HTTPS is stable for the production hostname.
+add_header Strict-Transport-Security "max-age=31536000; includeSubDomains" always;
+location ~ /\. { deny all; }
+location ~* /(storage|vendor)/ { deny all; }

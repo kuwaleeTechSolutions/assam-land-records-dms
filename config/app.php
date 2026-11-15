@@ -83,6 +83,7 @@ return [
     'fallback_locale' => env('APP_FALLBACK_LOCALE', 'en'),
 
     'faker_locale' => env('APP_FAKER_LOCALE', 'en_US'),
+    'dms_audit_hmac_key' => env('DMS_AUDIT_HMAC_KEY'),
 
     /*
     |--------------------------------------------------------------------------

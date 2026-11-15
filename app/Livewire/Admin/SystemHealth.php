@@ -1,0 +1,5 @@
+<?php
+namespace App\Livewire\Admin;
+use App\Models\{BackupRun,DocumentFile,FileIntegrityCheck,SecurityEvent};use Illuminate\Support\Facades\DB;use Livewire\Attributes\Layout;use Livewire\Component;
+#[Layout('layouts.app')]
+class SystemHealth extends Component{public function mount():void{abort_unless(app(\App\Domain\Authorization\Services\PermissionResolver::class)->allows(auth()->user(),'system.configure'),403);}public function render(){return view('livewire.admin.system-health',['dbOk'=>$this->dbOk(),'criticalEvents'=>SecurityEvent::where('severity','CRITICAL')->where('occurred_at','>=',now()->subDays(7))->count(),'integrityFailures'=>FileIntegrityCheck::whereIn('result',['FAIL','MISSING'])->where('checked_at','>=',now()->subDays(30))->count(),'masters'=>DocumentFile::where('file_role','MASTER')->count(),'lastDbBackup'=>BackupRun::where('backup_type','DATABASE')->latest('started_at')->first(),'lastFullBackup'=>BackupRun::where('backup_type','FULL')->latest('started_at')->first()]);}private function dbOk():bool{try{DB::select('SELECT 1');return true;}catch(\Throwable $e){return false;}}}

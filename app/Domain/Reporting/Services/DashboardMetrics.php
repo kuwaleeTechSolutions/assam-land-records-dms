@@ -1,0 +1,4 @@
+<?php
+namespace App\Domain\Reporting\Services;
+use App\Domain\Documents\Services\AuthorizedDocumentQuery;use App\Models\{DocumentFile,DocumentVerification,User};
+class DashboardMetrics{public function for(User $user):array{$q=app(AuthorizedDocumentQuery::class)->for($user);$base=clone $q;$status=function(string $s)use($q){return (clone $q)->where('status',$s)->count();};$ids=(clone $base)->pluck('id');return ['registered'=>(clone $base)->count(),'awaiting_upload'=>$status('AWAITING_UPLOAD'),'processing'=>$status('PROCESSING'),'pending_qc'=>$status('PENDING_QC'),'pending_verification'=>$status('PENDING_VERIFICATION'),'approved'=>$status('APPROVED'),'available'=>$status('AVAILABLE'),'rejected'=>(clone $q)->whereIn('status',['QC_REJECTED','VERIFICATION_REJECTED'])->count(),'archived'=>$status('ARCHIVED'),'storage_bytes'=>DocumentFile::whereHas('version',fn($v)=>$v->whereIn('document_id',$ids))->sum('size_bytes')];}}

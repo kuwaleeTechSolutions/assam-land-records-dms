@@ -1,0 +1,4 @@
+<?php
+namespace App\Domain\Documents\Services;
+use Illuminate\Support\Facades\DB;
+class ReferenceAllocator{public function next(int $year):array{$row=DB::table('reference_sequences')->where('sequence_type','DOCUMENT')->where('year',$year)->lockForUpdate()->first();if(!$row){DB::table('reference_sequences')->insert(['sequence_type'=>'DOCUMENT','year'=>$year,'current_value'=>0,'created_at'=>now(),'updated_at'=>now()]);$row=DB::table('reference_sequences')->where('sequence_type','DOCUMENT')->where('year',$year)->lockForUpdate()->first();}$next=((int)$row->current_value)+1;DB::table('reference_sequences')->where('id',$row->id)->update(['current_value'=>$next,'updated_at'=>now()]);return ['sequence'=>$next,'reference'=>sprintf('AS-LR-%d-%010d',$year,$next),'barcode'=>sprintf('LR%013d',$next)];}}

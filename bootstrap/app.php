@@ -1,5 +1,9 @@
 <?php
 
+use App\Http\Middleware\AssignRequestId;
+use App\Http\Middleware\EnsureUserIsActive;
+use App\Http\Middleware\RequireRecentMfa;
+use App\Http\Middleware\SecurityHeaders;
 use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
 use Illuminate\Foundation\Configuration\Middleware;
@@ -12,10 +16,22 @@ return Application::configure(basePath: dirname(__DIR__))
         health: '/up',
     )
     ->withMiddleware(function (Middleware $middleware): void {
-        //
+        $middleware->web(
+            prepend: [
+                SecurityHeaders::class,
+                AssignRequestId::class,
+            ],
+        );
+
+        $middleware->alias([
+            'active' => EnsureUserIsActive::class,
+            'mfa.recent' => RequireRecentMfa::class,
+        ]);
     })
     ->withExceptions(function (Exceptions $exceptions): void {
         $exceptions->shouldRenderJsonWhen(
-            fn (Request $request) => $request->is('api/*') || $request->expectsJson(),
+            fn (Request $request): bool =>
+                $request->is('api/*') || $request->expectsJson(),
         );
-    })->create();
+    })
+    ->create();

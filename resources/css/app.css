@@ -1,9 +1,2 @@
-@import 'tailwindcss';
-
-@source '../../vendor/laravel/framework/src/Illuminate/Pagination/resources/views/*.blade.php';
-@source '../../storage/framework/views/*.php';
-
-@theme {
-    --font-sans: 'Instrument Sans', ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji',
-        'Segoe UI Symbol', 'Noto Color Emoji';
-}
+@import 'bootstrap/dist/css/bootstrap.min.css';
+:root{--gov-navy:#0b2d4d;--gov-accent:#b7791f;--gov-bg:#f4f7fa}.gov-bg{background:linear-gradient(135deg,#eef4f8,#fff8eb);min-height:100vh}.login-card{max-width:480px;border:0;border-radius:18px}.gov-seal{width:68px;height:68px;margin:auto;border-radius:50%;display:grid;place-items:center;background:var(--gov-navy);color:#fff;font-weight:800;border:5px solid #d9b66f}.btn-gov{background:var(--gov-navy);color:#fff}.btn-gov:hover{background:#081f35;color:#fff}.gov-header{background:var(--gov-navy);color:#fff;padding:14px 22px;display:flex;justify-content:space-between;align-items:center}.gov-sidebar{width:240px;min-height:calc(100vh - 70px);background:#fff;border-right:1px solid #dde4ea;padding:18px;display:flex;flex-direction:column;gap:6px}.gov-sidebar a,.gov-sidebar span{padding:10px 12px;border-radius:8px;text-decoration:none;color:#263746}.gov-sidebar a{background:#eaf1f6;color:var(--gov-navy);font-weight:700}.stat-card{border:0;border-left:4px solid var(--gov-accent);box-shadow:0 4px 18px rgba(15,42,67,.08)}

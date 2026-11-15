@@ -1,0 +1,4 @@
+<?php
+namespace Tests\Feature\Integrity;
+use App\Domain\Storage\Services\IntegrityScanner;use App\Models\DocumentFile;use Illuminate\Foundation\Testing\RefreshDatabase;use Illuminate\Support\Facades\Storage;use Tests\TestCase;
+class IntegrityScannerTest extends TestCase{use RefreshDatabase;public function test_missing_object_generates_failed_integrity_evidence():void{Storage::fake('local');$file=DocumentFile::factory()->create(['storage_disk'=>'local','storage_key'=>'missing/master.pdf','sha256'=>str_repeat('a',64)]);$ok=app(IntegrityScanner::class)->scan($file);$this->assertFalse($ok);$this->assertDatabaseHas('file_integrity_checks',['document_file_id'=>$file->id,'result'=>'MISSING']);$this->assertDatabaseHas('security_events',['event_type'=>'CHECKSUM_MISMATCH','severity'=>'CRITICAL']);}}

@@ -1,0 +1,5 @@
+<?php
+namespace App\Livewire\Reports;
+use App\Domain\Audit\Services\AuditRecorder;use App\Jobs\GenerateDocumentExport;use App\Models\ExportLog;use Illuminate\Support\Str;use Livewire\Attributes\Layout;use Livewire\Component;use Livewire\WithPagination;
+#[Layout('layouts.app')]
+class DocumentExports extends Component{use WithPagination;public function requestExport(AuditRecorder $audit):void{abort_unless(app(\App\Domain\Authorization\Services\PermissionResolver::class)->allows(auth()->user(),'reports.export'),403);$log=ExportLog::create(['ulid'=>(string)Str::ulid(),'user_id'=>auth()->id(),'export_type'=>'DOCUMENT_INVENTORY','filters'=>[],'contains_sensitive_data'=>false,'status'=>'QUEUED','requested_at'=>now()]);$audit->record('EXPORT_REQUESTED','REPORTING','SUCCESS',auth()->user(),['context'=>['export_ulid'=>$log->ulid]]);GenerateDocumentExport::dispatch($log->id);session()->flash('success','Export queued.');}public function render(){return view('livewire.reports.document-exports',['exports'=>ExportLog::where('user_id',auth()->id())->latest('requested_at')->paginate(20)]);}}

@@ -1,0 +1,12 @@
+[program:assam-land-dms-worker]
+process_name=%(program_name)s_%(process_num)02d
+command=php /var/www/assam-land-records-dms/artisan queue:work redis --queue=integrity,maintenance,imports,exports,pdf-processing,default --sleep=1 --tries=3 --timeout=1200
+numprocs=4
+autostart=true
+autorestart=true
+stopasgroup=true
+killasgroup=true
+user=www-data
+redirect_stderr=true
+stdout_logfile=/var/log/assam-land-dms-worker.log
+stopwaitsecs=1300

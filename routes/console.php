@@ -1,8 +1,18 @@
 <?php
 
-use Illuminate\Foundation\Inspiring;
-use Illuminate\Support\Facades\Artisan;
+use App\Jobs\CleanupPrivateTemporaryFiles;
+use App\Jobs\ScanRepositoryIntegrity;
+use Illuminate\Support\Facades\Schedule;
 
-Artisan::command('inspire', function () {
-    $this->comment(Inspiring::quote());
-})->purpose('Display an inspiring quote');
+Schedule::job(new ScanRepositoryIntegrity(2000))
+    ->dailyAt('01:30')
+    ->withoutOverlapping()
+    ->onOneServer();
+
+Schedule::job(new CleanupPrivateTemporaryFiles(24))
+    ->hourly()
+    ->withoutOverlapping()
+    ->onOneServer();
+
+Schedule::command('queue:prune-failed --hours=168')
+    ->dailyAt('03:30');

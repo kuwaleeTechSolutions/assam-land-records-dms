@@ -1,0 +1,4 @@
+<?php
+namespace Database\Seeders;
+use App\Models\CompressionProfile;use Illuminate\Database\Seeder;
+class CompressionProfileSeeder extends Seeder{public function run():void{$profiles=[['ARCHIVAL_HIGH',1,'High-quality archival derivative','ARCHIVAL',400,'PRESERVE',92,false,true],['BALANCED',1,'Balanced storage derivative','BALANCED',300,'PRESERVE',85,true,true],['BW_DOCUMENT',1,'Black-and-white document optimization','BLACK_WHITE',400,'GRAY',88,true,false],['COLOR_DOCUMENT',1,'Color document optimization','COLOR',300,'COLOR',88,true,false]];foreach($profiles as [$code,$version,$name,$type,$dpi,$color,$quality,$down,$default])CompressionProfile::updateOrCreate(['code'=>$code,'version'=>$version],['name'=>$name,'profile_type'=>$type,'target_dpi'=>$dpi,'color_mode'=>$color,'image_quality'=>$quality,'downsampling_allowed'=>$down,'preserve_fonts'=>true,'preserve_metadata'=>true,'configuration'=>[],'status'=>'PUBLISHED','is_default'=>$default]);}}
