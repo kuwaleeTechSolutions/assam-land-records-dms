@@ -21,6 +21,12 @@ use App\Livewire\Reports\OperationsDashboard;
 use App\Livewire\Verification\ReviewVerification;
 use App\Livewire\Verification\VerificationQueue;
 use Illuminate\Support\Facades\Route;
+use App\Livewire\SpeedDigitization\UploadVillageZip;
+use App\Livewire\SpeedDigitization\BatchList;
+use App\Livewire\SpeedDigitization\BatchDetails;
+use App\Livewire\SpeedDigitization\ExtractionVerificationQueue;
+use App\Livewire\SpeedDigitization\ReviewExtraction;
+use App\Livewire\SpeedDigitization\RecognitionDashboard;
 
 Route::redirect('/', '/dashboard');
 
@@ -125,6 +131,17 @@ Route::middleware(['auth', 'active'])->group(function (): void {
 
     Route::get('/admin/retention', RetentionPolicies::class)
         ->name('admin.retention');
+    
+        Route::get('/speed-digitization/upload', UploadVillageZip::class)->name('speed.upload');
+        Route::get('/speed-digitization/batches', BatchList::class)->name('speed.batches');
+        Route::get('/speed-digitization/batches/{batch}', BatchDetails::class)->name('speed.batches.show');
+        Route::get('/speed-digitization/verification', ExtractionVerificationQueue::class)
+            ->name('speed.extractions.queue');
+        Route::get('/speed-digitization/verification/{extraction}', ReviewExtraction::class)
+            ->name('speed.extractions.review');
+        Route::get('/speed-digitization/recognition-dashboard', RecognitionDashboard::class)
+            ->name('speed.recognition.dashboard');
+        
 });
 
 Route::middleware(['auth', 'active', 'mfa.recent'])->group(function (): void {

@@ -1,0 +1,13 @@
+services:
+  htr:
+    build: .
+    restart: unless-stopped
+    ports:
+      - "127.0.0.1:8001:8000"
+    environment:
+      HTR_MODEL_PATH: /models/assamese-land-record-htr
+      HTR_API_TOKEN: ${HTR_API_TOKEN}
+      HTR_DEVICE: ${HTR_DEVICE:-cpu}
+      HTR_MAX_IMAGE_MB: 25
+    volumes:
+      - ./models:/models:ro

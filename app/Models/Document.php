@@ -25,4 +25,6 @@ public function retentionPolicy()
 {
     return $this->belongsTo(RetentionPolicy::class);
 }
+public function lac(){return $this->belongsTo(\App\Models\Lac::class);}
+public function digitizationBatch(){return $this->belongsTo(\App\Models\DigitizationBatch::class);}
 }

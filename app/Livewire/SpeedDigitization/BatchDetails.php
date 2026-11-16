@@ -1,0 +1,4 @@
+<?php
+namespace App\Livewire\SpeedDigitization;
+use App\Models\DigitizationBatch; use Livewire\Attributes\Layout; use Livewire\Component; use Livewire\WithPagination;
+#[Layout('layouts.app')] class BatchDetails extends Component {use WithPagination; public DigitizationBatch $batch; public function mount(DigitizationBatch $batch):void{abort_unless(app(\App\Domain\Authorization\Services\PermissionResolver::class)->allows(auth()->user(),'bulk.upload'),403);$this->batch=$batch;} public function render(){return view('livewire.speed-digitization.batch-details',['batch'=>$this->batch->fresh(['district','lac','revenueCircle','mouza','village','documentType']),'items'=>$this->batch->items()->latest()->paginate(50)]);}}

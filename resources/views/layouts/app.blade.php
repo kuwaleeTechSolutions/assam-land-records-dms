@@ -46,6 +46,19 @@
             Dashboard
         </a>
 
+        @can('bulk.upload')
+            <a href="{{ route('speed.upload') }}">Speed Digitization</a>
+            <a href="{{ route('speed.batches') }}">Digitization Batches</a>
+        @endcan
+        @can('documents.verify')
+            <a href="{{ route('speed.extractions.queue') }}">
+                OCR/HTR Verification
+            </a>
+        @endcan
+        @can('reports.view')
+            <a href="{{ route('speed.recognition.dashboard') }}">Recognition Operations</a>
+        @endcan
+
         <a href="{{ route('documents.search') }}">
             Search Records
         </a>
